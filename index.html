@@ -9,28 +9,32 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
         }
         #quiz-modal {
             transition: opacity 0.3s ease;
         }
+        .unit-btn.active {
+            background-color: #4f46e5;
+            color: white;
+        }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="text-gray-800">
 
     <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-5xl">
         <!-- Header Section -->
         <header class="text-center mb-8">
-            <h1 class="text-3xl sm:text-4xl font-bold text-blue-600">Tiếng Anh 9 - Friends Plus</h1>
+            <h1 class="text-3xl sm:text-4xl font-bold text-indigo-700">Tiếng Anh 9 - Friends Plus</h1>
             <p class="text-lg text-gray-700 font-medium mt-2">Mr. Anh Đinh (Đinh Hoàng Tuấn Anh)</p>
-            <p class="text-gray-600 mt-2">Your study companion for vocabulary and grammar.</p>
         </header>
 
         <!-- Unit Selector -->
-        <div class="mb-8">
-            <label for="unit-select" class="block text-lg font-medium text-gray-700 mb-2">Choose a Unit:</label>
-            <select id="unit-select" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-                <!-- Options will be populated by JavaScript -->
-            </select>
+        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
+            <h2 class="text-xl font-bold text-center text-gray-700 mb-4">Choose a Unit</h2>
+            <div id="unit-selector-btns" class="grid grid-cols-3 sm:grid-cols-5 gap-3">
+                <!-- Unit buttons will be populated by JavaScript -->
+            </div>
         </div>
         
         <!-- Practice Buttons Container -->
@@ -45,19 +49,19 @@
 
 
         <!-- Content Display Area -->
-        <div id="content-display" class="space-y-8">
+        <div id="content-display" class="space-y-8 hidden">
             <!-- Vocabulary Section -->
-            <div>
-                <h2 class="text-2xl font-semibold text-blue-700 border-b-2 border-blue-200 pb-2 mb-4">Vocabulary</h2>
-                <div id="vocab-list" class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-                    <!-- Vocabulary list will be inserted here -->
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-bold text-indigo-600 border-b-2 border-indigo-200 pb-3 mb-4">Vocabulary</h2>
+                <div id="vocab-list" class="overflow-x-auto">
+                    <!-- Vocabulary table will be inserted here -->
                 </div>
             </div>
 
             <!-- Grammar Section -->
-            <div>
-                <h2 class="text-2xl font-semibold text-green-700 border-b-2 border-green-200 pb-2 mb-4">Grammar</h2>
-                <div id="grammar-points" class="bg-white p-6 rounded-lg shadow-md border border-gray-200 space-y-4">
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-bold text-indigo-600 border-b-2 border-indigo-200 pb-3 mb-4">Grammar</h2>
+                <div id="grammar-points" class="space-y-6">
                     <!-- Grammar points will be inserted here -->
                 </div>
             </div>
@@ -86,13 +90,14 @@
 
 
     <script>
-        const data = {
-            "Starter Unit": {
+        const data = [
+            {
+                unitName: "Starter",
                 vocabulary: [
                     { term: "celebrity", wordClass: "n", vietnamese: "người nổi tiếng" }, { term: "comment", wordClass: "n", vietnamese: "lời bình luận, nhận xét" }, { term: "games console", wordClass: "n", vietnamese: "máy chơi game" }, { term: "navigate", wordClass: "v", vietnamese: "điều hướng, tìm đường" }, { term: "necessity", wordClass: "n", vietnamese: "vật cần thiết" }, { term: "spellchecker", wordClass: "n", vietnamese: "chương trình kiểm tra lỗi chính tả" }, { term: "stream", wordClass: "v", vietnamese: "phát trực tuyến" }, { term: "wearable", wordClass: "n", vietnamese: "thiết bị đeo tay" }
                 ],
                 grammar: [
-                    { point: "Present Tenses", structure: "Present Simple: S + V(s/es)<br>Present Continuous: S + am/is/are + V-ing", explanation: "Simple for habits/facts; Continuous for actions happening now.", vietnamese: "Thì hiện tại đơn cho thói quen/sự thật; Hiện tại tiếp diễn cho hành động đang xảy ra.", example: "I <strong>check</strong> my social media every day. / He <strong>is uploading</strong> some photos." }, { point: "Question words before to-infinitive", structure: "Verb + Wh-word + to-infinitive", explanation: "Used as the object of the main verb.", vietnamese: "Dùng làm tân ngữ cho động từ chính.", example: "Could you tell me <strong>where to find</strong> a Vietnamese restaurant?" }, { point: "Question tags", structure: "Positive statement, negative tag? / Negative statement, positive tag?", explanation: "Used to check information or ask for agreement.", vietnamese: "Dùng để kiểm tra thông tin hoặc tìm sự đồng tình.", example: "You can get a new app for that, <strong>can't you?</strong>" }, { point: "used to", structure: "S + used to + V (bare)", explanation: "Describes a past habit or state that is no longer true.", vietnamese: "Mô tả một thói quen hoặc trạng thái trong quá khứ nay không còn nữa.", example: "They <strong>used to have</strong> different skills in the past." }
+                    { point: "Present Tenses (Thì hiện tại)", structure: "<strong>Simple:</strong> S + V(s/es)<br><strong>Continuous:</strong> S + am/is/are + V-ing", explanation: "Simple for habits/facts; Continuous for actions happening now.", vietnamese: "Hiện tại đơn cho thói quen/sự thật; Hiện tại tiếp diễn cho hành động đang xảy ra.", example: "I <strong>check</strong> my social media every day. / He <strong>is uploading</strong> some photos." }, { point: "Question words before to-infinitive (Từ để hỏi + to-V)", structure: "Verb + Wh-word + to-infinitive", explanation: "Used as the object of the main verb.", vietnamese: "Dùng làm tân ngữ cho động từ chính.", example: "Could you tell me <strong>where to find</strong> a Vietnamese restaurant?" }, { point: "Question tags (Câu hỏi đuôi)", structure: "Positive statement, negative tag? <br> Negative statement, positive tag?", explanation: "Used to check information or ask for agreement.", vietnamese: "Dùng để kiểm tra thông tin hoặc tìm sự đồng tình.", example: "You can get a new app for that, <strong>can't you?</strong>" }, { point: "used to", structure: "S + used to + V (bare)", explanation: "Describes a past habit or state that is no longer true.", vietnamese: "Mô tả một thói quen hoặc trạng thái trong quá khứ nay không còn nữa.", example: "They <strong>used to have</strong> different skills in the past." }
                 ],
                 quiz: {
                     grammar: [
@@ -100,12 +105,13 @@
                     ]
                 }
             },
-            "Unit 1: Then and now": {
+            {
+                unitName: "1",
                 vocabulary: [
                     { term: "anecdote", wordClass: "n", vietnamese: "chuyện vặt, giai thoại" }, { term: "belong to", wordClass: "phr v", vietnamese: "thuộc về" }, { term: "city dweller", wordClass: "n", vietnamese: "người sống ở thành phố" }, { term: "come across", wordClass: "phr v", vietnamese: "tình cờ thấy" }, { term: "common", wordClass: "adj", vietnamese: "thông thường, phổ biến" }, { term: "competitive", wordClass: "adj", vietnamese: "cạnh tranh, đua tranh" }, { term: "crypt", wordClass: "n", vietnamese: "hầm mộ" }, { term: "damaged", wordClass: "adj", vietnamese: "bị hư hại" }, { term: "efficient", wordClass: "adj", vietnamese: "có hiệu quả" }, { term: "fragile", wordClass: "adj", vietnamese: "dễ vỡ, mỏng manh" }, { term: "get around", wordClass: "phr v", vietnamese: "di chuyển từ nơi này đến nơi khác" }, { term: "get back", wordClass: "phr v", vietnamese: "lấy lại" }, { term: "invest in", wordClass: "phr v", vietnamese: "đầu tư vào" }, { term: "lead to", wordClass: "phr v", vietnamese: "dẫn đến" }, { term: "look back on", wordClass: "phr v", vietnamese: "nhìn lại (quá khứ)" }, { term: "look forward to", wordClass: "phr v", vietnamese: "trông mong, mong chờ" }, { term: "rare", wordClass: "adj", vietnamese: "hiếm có" }, { term: "recognise", wordClass: "v", vietnamese: "nhận ra" }, { term: "rely on", wordClass: "phr v", vietnamese: "phụ thuộc vào" }, { term: "result from", wordClass: "phr v", vietnamese: "do, có nguyên nhân từ" }, { term: "time capsule", wordClass: "n", vietnamese: "hộp thời gian" }, { term: "tough", wordClass: "adj", vietnamese: "chắc, bền" }, { term: "transport", wordClass: "n", vietnamese: "sự vận chuyển" }, { term: "valuable", wordClass: "adj", vietnamese: "quý giá" }, { term: "vehicle", wordClass: "n", vietnamese: "xe cộ" }
                 ],
                 grammar: [
-                    { point: "Past Perfect", structure: "S + had + V3/Ved", explanation: "To talk about a past action that finished before another past action.", vietnamese: "Để nói về một hành động trong quá khứ đã kết thúc trước một hành động khác trong quá khứ.", example: "We went into town after we'<strong>d had</strong> lunch." }, { point: "Past Narrative Tenses", structure: "Past Simple: S + V2/Ved<br>Past Continuous: S + was/were + V-ing", explanation: "Used together when one action (past simple) interrupts another action in progress (past continuous).", vietnamese: "Dùng cùng nhau khi một hành động (quá khứ đơn) xen vào một hành động đang diễn ra (quá khứ tiếp diễn).", example: "I <strong>was searching</strong> for my keys when I <strong>found</strong> the earring." }
+                    { point: "Past Perfect (Thì quá khứ hoàn thành)", structure: "S + had + V3/Ved", explanation: "To talk about a past action that finished before another past action.", vietnamese: "Để nói về một hành động trong quá khứ đã kết thúc trước một hành động khác trong quá khứ.", example: "We went into town after we'<strong>d had</strong> lunch." }, { point: "Past Narrative Tenses (Các thì kể chuyện quá khứ)", structure: "<strong>Past Simple:</strong> S + V2/Ved<br><strong>Past Continuous:</strong> S + was/were + V-ing", explanation: "Used together when one action (past simple) interrupts another action in progress (past continuous).", vietnamese: "Dùng cùng nhau khi một hành động (quá khứ đơn) xen vào một hành động đang diễn ra (quá khứ tiếp diễn).", example: "I <strong>was searching</strong> for my keys when I <strong>found</strong> the earring." }
                 ],
                  quiz: {
                     grammar: [
@@ -113,12 +119,13 @@
                     ]
                 }
             },
-            "Unit 2: The self": {
+            {
+                unitName: "2",
                  vocabulary: [
                     { term: "against", wordClass: "prep", vietnamese: "chống lại" }, { term: "alternative", wordClass: "adj", vietnamese: "khác; thay thế" }, { term: "avoid", wordClass: "v", vietnamese: "tránh" }, { term: "bother", wordClass: "v", vietnamese: "bận tâm làm việc gì" }, { term: "commit", wordClass: "v", vietnamese: "cam kết, quyết định" }, { term: "consider", wordClass: "v", vietnamese: "xem xét" }, { term: "disposable", wordClass: "adj", vietnamese: "dùng một lần" }, { term: "drop out", wordClass: "phr v", vietnamese: "bỏ giữa chừng" }, { term: "get (a lot) out of", wordClass: "phr v", vietnamese: "nhận được niềm vui, lợi ích từ" }, { term: "get in touch with", wordClass: "idiom", vietnamese: "giữ liên lạc với" }, { term: "get into", wordClass: "phr v", vietnamese: "trở nên thích thú" }, { term: "get involved with", wordClass: "phr v", vietnamese: "tham gia vào" }, { term: "get on with", wordClass: "phr v", vietnamese: "bắt đầu hoặc tiếp tục làm gì đó" }, { term: "get used to", wordClass: "idiom", vietnamese: "trở nên quen với" }, { term: "get together", wordClass: "phr v", vietnamese: "gặp mặt" }, { term: "hesitate", wordClass: "v", vietnamese: "do dự" }, { term: "impact", wordClass: "n", vietnamese: "sự tác động, ảnh hưởng" }, { term: "in favour", wordClass: "phr", vietnamese: "ủng hộ" }, { term: "lifestyle", wordClass: "n", vietnamese: "cách sống" }, { term: "make up one's mind", wordClass: "idiom", vietnamese: "quyết định" }, { term: "put off", wordClass: "phr v", vietnamese: "trì hoãn" }, { term: "rush into", wordClass: "phr v", vietnamese: "làm gì đó vội vàng" }, { term: "stick with", wordClass: "phr v", vietnamese: "tiếp tục làm gì đó" }, { term: "think twice", wordClass: "idiom", vietnamese: "suy nghĩ kỹ" }, { term: "try out", wordClass: "phr v", vietnamese: "thử nghiệm" }
                 ],
                 grammar: [
-                    { point: "Present Perfect Simple vs Continuous", structure: "Simple: S + have/has + V3/Ved<br>Continuous: S + have/has + been + V-ing", explanation: "Simple for completed actions; Continuous for incomplete actions focusing on duration.", vietnamese: "Đơn cho hành động đã hoàn thành; Tiếp diễn cho hành động chưa hoàn thành, nhấn mạnh quá trình.", example: "We'<strong>ve played</strong> a fantastic game. / We'<strong>ve been playing</strong> for ages." }, { point: "Present Perfect vs Past Simple", structure: "Present Perfect for unfinished time; Past Simple for finished time.", explanation: "Use Present Perfect with 'for', 'since'. Use Past Simple with 'ago', 'last week'.", vietnamese: "Hiện tại hoàn thành cho khoảng thời gian chưa kết thúc; Quá khứ đơn cho thời gian đã kết thúc.", example: "I'<strong>ve become</strong> more confident this year. / We <strong>did</strong> the course two years ago." }, { point: "Adverbial clauses of concession", structure: "Although/Though + clause<br>Despite/In spite of + noun/gerund", explanation: "To contrast two opposite ideas.", vietnamese: "Để đối lập hai ý tưởng trái ngược.", example: "<strong>Although</strong> it was rainy, we went for a walk. / <strong>In spite of</strong> the rain, we went for a walk." }
+                    { point: "Present Perfect Simple vs Continuous (HTHT đơn và tiếp diễn)", structure: "<strong>Simple:</strong> S + have/has + V3/Ved<br><strong>Continuous:</strong> S + have/has + been + V-ing", explanation: "Simple for completed actions; Continuous for incomplete actions focusing on duration.", vietnamese: "Đơn cho hành động đã hoàn thành; Tiếp diễn cho hành động chưa hoàn thành, nhấn mạnh quá trình.", example: "We'<strong>ve played</strong> a fantastic game. / We'<strong>ve been playing</strong> for ages." }, { point: "Present Perfect vs Past Simple (HTHT và QKĐ)", structure: "Present Perfect for unfinished time; Past Simple for finished time.", explanation: "Use Present Perfect with 'for', 'since'. Use Past Simple with 'ago', 'last week'.", vietnamese: "Hiện tại hoàn thành cho khoảng thời gian chưa kết thúc; Quá khứ đơn cho thời gian đã kết thúc.", example: "I'<strong>ve become</strong> more confident this year. / We <strong>did</strong> the course two years ago." }, { point: "Adverbial clauses of concession (Mệnh đề trạng ngữ chỉ sự nhượng bộ)", structure: "<strong>Although/Though</strong> + clause<br><strong>Despite/In spite of</strong> + noun/gerund", explanation: "To contrast two opposite ideas.", vietnamese: "Để đối lập hai ý tưởng trái ngược.", example: "<strong>Although</strong> it was rainy, we went for a walk. / <strong>In spite of</strong> the rain, we went for a walk." }
                 ],
                 quiz: {
                     grammar: [
@@ -126,12 +133,13 @@
                     ]
                 }
             },
-            "Unit 3: Our surroundings": {
+            {
+                unitName: "3",
                 vocabulary: [
                     { term: "advertisement", wordClass: "n", vietnamese: "quảng cáo" }, { term: "bar code", wordClass: "n", vietnamese: "mã vạch" }, { term: "bargain", wordClass: "n", vietnamese: "sự mặc cả, món hời" }, { term: "brand", wordClass: "n", vietnamese: "thương hiệu" }, { term: "checkout", wordClass: "n", vietnamese: "quầy thanh toán" }, { term: "consumer", wordClass: "n", vietnamese: "người tiêu dùng" }, { term: "exchange", wordClass: "v", vietnamese: "trao đổi" }, { term: "fit", wordClass: "v", vietnamese: "vừa vặn" }, { term: "influencer", wordClass: "n", vietnamese: "người có tầm ảnh hưởng" }, { term: "label", wordClass: "n", vietnamese: "nhãn hiệu" }, { term: "luxury", wordClass: "n", vietnamese: "sự xa xỉ" }, { term: "marketing", wordClass: "n", vietnamese: "tiếp thị" }, { term: "massive", wordClass: "adj", vietnamese: "to lớn, đồ sộ" }, { term: "producer", wordClass: "n", vietnamese: "nhà sản xuất" }, { term: "promote", wordClass: "v", vietnamese: "quảng bá" }, { term: "receipt", wordClass: "n", vietnamese: "hóa đơn" }, { term: "retailer", wordClass: "n", vietnamese: "nhà bán lẻ" }, { term: "rip-off", wordClass: "n", vietnamese: "món đồ giá quá đắt" }, { term: "scan", wordClass: "v", vietnamese: "quét (mã)" }, { term: "special offer", wordClass: "n", vietnamese: "ưu đãi đặc biệt" }, { term: "status symbol", wordClass: "n", vietnamese: "vật biểu tượng cho địa vị" }, { term: "try on", wordClass: "phr v", vietnamese: "thử (quần áo)" }, { term: "value", wordClass: "n", vietnamese: "giá trị" }, { term: "versatile", wordClass: "adj", vietnamese: "đa năng" }, { term: "window shopping", wordClass: "n", vietnamese: "đi xem hàng" }
                 ],
                 grammar: [
-                    { point: "Adverbial clauses of reason", structure: "because/as/since + clause<br>because of + noun/noun phrase", explanation: "To indicate the reason for an action.", vietnamese: "Để chỉ lý do của một hành động.", example: "She never eats meat <strong>because</strong> she is a vegetarian. / We couldn't go out <strong>because of</strong> the typhoon." }, { point: "Future Forms", structure: "will + V (bare)<br>be going to + V (bare)", explanation: "'will' for predictions/spontaneous decisions; 'going to' for plans/intentions.", vietnamese: "'will' cho dự đoán/quyết định tức thời; 'going to' cho kế hoạch/dự định.", example: "People <strong>will buy</strong> most things online. / He'<strong>s going to buy</strong> new trainers." }, { point: "Conjunctions", structure: "as well as; both ... and; not only ... but also", explanation: "To connect and add information.", vietnamese: "Để kết nối và thêm thông tin.", example: "This product is <strong>both</strong> cheap <strong>and</strong> well designed." }
+                    { point: "Adverbial clauses of reason (Mệnh đề trạng ngữ chỉ lý do)", structure: "<strong>because/as/since</strong> + clause<br><strong>because of</strong> + noun/noun phrase", explanation: "To indicate the reason for an action.", vietnamese: "Để chỉ lý do của một hành động.", example: "She never eats meat <strong>because</strong> she is a vegetarian. / We couldn't go out <strong>because of</strong> the typhoon." }, { point: "Future Forms (Các thì tương lai)", structure: "<strong>will</strong> + V (bare)<br><strong>be going to</strong> + V (bare)", explanation: "'will' for predictions/spontaneous decisions; 'going to' for plans/intentions.", vietnamese: "'will' cho dự đoán/quyết định tức thời; 'going to' cho kế hoạch/dự định.", example: "People <strong>will buy</strong> most things online. / He'<strong>s going to buy</strong> new trainers." }, { point: "Conjunctions (Liên từ)", structure: "as well as; both ... and; not only ... but also", explanation: "To connect and add information.", vietnamese: "Để kết nối và thêm thông tin.", example: "This product is <strong>both</strong> cheap <strong>and</strong> well designed." }
                 ],
                  quiz: {
                     grammar: [
@@ -139,12 +147,13 @@
                     ]
                 }
             },
-            "Unit 4: Feelings": {
+            {
+                unitName: "4",
                  vocabulary: [
                     { term: "aggressive", wordClass: "adj", vietnamese: "hung hăng, hay gây hấn" }, { term: "annoyance", wordClass: "n", vietnamese: "sự bực mình, mối phiền muộn" }, { term: "annoyed", wordClass: "adj", vietnamese: "khó chịu, bực mình" }, { term: "assertive", wordClass: "adj", vietnamese: "quyết đoán" }, { term: "blue", wordClass: "adj", vietnamese: "buồn" }, { term: "boredom", wordClass: "n", vietnamese: "nỗi buồn tẻ, chán chường" }, { term: "broken-hearted", wordClass: "adj", vietnamese: "đau khổ, tan nát cõi lòng" }, { term: "calm down", wordClass: "phr v", vietnamese: "bình tĩnh lại" }, { term: "cheer up", wordClass: "phr v", vietnamese: "vui lên, phấn khởi lên" }, { term: "concentrate", wordClass: "v", vietnamese: "tập trung" }, { term: "considerate", wordClass: "adj", vietnamese: "ân cần, chu đáo" }, { term: "disgust", wordClass: "n", vietnamese: "sự chán ghét, ghê tởm" }, { term: "distract", wordClass: "v", vietnamese: "làm sao lãng" }, { term: "embarrassing", wordClass: "adj", vietnamese: "gây lúng túng, bối rối" }, { term: "emotion", wordClass: "n", vietnamese: "cảm xúc" }, { term: "excitement", wordClass: "n", vietnamese: "sự hào hứng, phấn khởi" }, { term: "fear", wordClass: "n", vietnamese: "sự sợ hãi" }, { term: "frightening", wordClass: "adj", vietnamese: "kinh khủng, đáng sợ" }, { term: "improve", wordClass: "v", vietnamese: "cải thiện" }, { term: "open-minded", wordClass: "adj", vietnamese: "cởi mở" }, { term: "personality", wordClass: "n", vietnamese: "tính cách" }, { term: "reduce", wordClass: "v", vietnamese: "làm giảm" }, { term: "relaxation", wordClass: "n", vietnamese: "sự nghỉ ngơi, giải trí" }, { term: "stressful", wordClass: "adj", vietnamese: "gây căng thẳng" }, { term: "sympathetic", wordClass: "adj", vietnamese: "thông cảm, đồng cảm" }
                 ],
                 grammar: [
-                    { point: "Possibility and Certainty", structure: "may/might/could + V (possibility)<br>must + V (certainty)<br>can't + V (impossibility)", explanation: "To express degrees of certainty about something.", vietnamese: "Để diễn tả các mức độ chắc chắn về một điều gì đó.", example: "Experts <strong>might learn</strong> more about animals. / Your dog <strong>must be</strong> tired." }, { point: "Ability", structure: "can/could/be able to + V (bare)", explanation: "To express someone's ability to do something.", vietnamese: "Để diễn tả khả năng làm gì đó của ai đó.", example: "I <strong>couldn't read</strong> very well when I was five. / I <strong>won't be able to</strong> come later." }, { point: "Advice and Obligation", structure: "should + V (advice)<br>must/have to + V (obligation)", explanation: "'should' for advice; 'must/have to' for rules or necessity.", vietnamese: "'should' cho lời khuyên; 'must/have to' cho các quy tắc hoặc sự cần thiết.", example: "You <strong>should listen</strong> to classical music. / You <strong>must wear</strong> a cycle helmet." }
+                    { point: "Possibility and Certainty (Khả năng và sự chắc chắn)", structure: "<strong>may/might/could</strong> + V (possibility)<br><strong>must</strong> + V (certainty)<br><strong>can't</strong> + V (impossibility)", explanation: "To express degrees of certainty about something.", vietnamese: "Để diễn tả các mức độ chắc chắn về một điều gì đó.", example: "Experts <strong>might learn</strong> more about animals. / Your dog <strong>must be</strong> tired." }, { point: "Ability (Khả năng)", structure: "can/could/be able to + V (bare)", explanation: "To express someone's ability to do something.", vietnamese: "Để diễn tả khả năng làm gì đó của ai đó.", example: "I <strong>couldn't read</strong> very well when I was five. / I <strong>won't be able to</strong> come later." }, { point: "Advice and Obligation (Lời khuyên và sự bắt buộc)", structure: "<strong>should</strong> + V (advice)<br><strong>must/have to</strong> + V (obligation)", explanation: "'should' for advice; 'must/have to' for rules or necessity.", vietnamese: "'should' cho lời khuyên; 'must/have to' cho các quy tắc hoặc sự cần thiết.", example: "You <strong>should listen</strong> to classical music. / You <strong>must wear</strong> a cycle helmet." }
                 ],
                 quiz: {
                     grammar: [
@@ -152,12 +161,13 @@
                     ]
                 }
             },
-            "Unit 5: Discovery and invention": {
+            {
+                unitName: "5",
                 vocabulary: [
                     { term: "alien", wordClass: "n", vietnamese: "người ngoài hành tinh" }, { term: "capsule", wordClass: "n", vietnamese: "khoang tàu vũ trụ" }, { term: "collaborate", wordClass: "v", vietnamese: "hợp tác" }, { term: "cure", wordClass: "v/n", vietnamese: "chữa bệnh; phương thuốc" }, { term: "discovery", wordClass: "n", vietnamese: "sự khám phá" }, { term: "drug", wordClass: "n", vietnamese: "thuốc" }, { term: "electricity", wordClass: "n", vietnamese: "điện" }, { term: "enable", wordClass: "v", vietnamese: "cho phép, làm cho có thể" }, { term: "experiment", wordClass: "v/n", vietnamese: "thí nghiệm" }, { term: "exploration", wordClass: "n", vietnamese: "sự thám hiểm" }, { term: "extinct", wordClass: "adj", vietnamese: "tuyệt chủng" }, { term: "gravity", wordClass: "n", vietnamese: "trọng lực" }, { term: "human guinea pigs", wordClass: "n", vietnamese: "người tình nguyện thử nghiệm thuốc" }, { term: "meteor", wordClass: "n", vietnamese: "sao băng" }, { term: "microchip", wordClass: "n", vietnamese: "vi mạch" }, { term: "radar", wordClass: "n", vietnamese: "hệ thống ra-đa" }, { term: "species", wordClass: "n", vietnamese: "loài" }, { term: "threat", wordClass: "n", vietnamese: "sự đe dọa" }
                 ],
                 grammar: [
-                    { point: "Gerunds and Infinitives", structure: "Gerund (V-ing) as subject/after prepositions.<br>Infinitive (to + V) to explain purpose/after adjectives.", explanation: "Different verb forms used in different parts of a sentence.", vietnamese: "Các dạng động từ khác nhau được sử dụng ở các phần khác nhau trong câu.", example: "<strong>Running</strong> is good exercise. / We used the telescope <strong>to look</strong> at the moon." }, { point: "Conditionals (0, 1, 2)", structure: "Zero: If + present, present<br>First: If + present, will + V<br>Second: If + past, would + V", explanation: "Zero for facts, First for real possibilities, Second for unreal situations.", vietnamese: "Câu điều kiện loại 0 cho sự thật, loại 1 cho khả năng thực tế, loại 2 cho tình huống không có thật.", example: "If you <strong>heat</strong> water, it <strong>evaporates</strong>. / If it <strong>rains</strong>, we <strong>won't see</strong> the stars. / If I <strong>went</strong> to Mars, I'<strong>d do</strong> some experiments." }, { point: "wish", structure: "S + wish(es) + (that) + S + V2/Ved", explanation: "To express wishes for things that are not possible in the present.", vietnamese: "Để bày tỏ mong muốn về những điều không thể xảy ra ở hiện tại.", example: "I <strong>wish</strong> I <strong>were</strong> able to return to the past." }
+                    { point: "Gerunds and Infinitives (Danh động từ và động từ nguyên mẫu)", structure: "<strong>Gerund (V-ing)</strong> as subject/after prepositions.<br><strong>Infinitive (to + V)</strong> to explain purpose/after adjectives.", explanation: "Different verb forms used in different parts of a sentence.", vietnamese: "Các dạng động từ khác nhau được sử dụng ở các phần khác nhau trong câu.", example: "<strong>Running</strong> is good exercise. / We used the telescope <strong>to look</strong> at the moon." }, { point: "Conditionals (0, 1, 2) (Câu điều kiện)", structure: "<strong>Zero:</strong> If + present, present<br><strong>First:</strong> If + present, will + V<br><strong>Second:</strong> If + past, would + V", explanation: "Zero for facts, First for real possibilities, Second for unreal situations.", vietnamese: "Câu điều kiện loại 0 cho sự thật, loại 1 cho khả năng thực tế, loại 2 cho tình huống không có thật.", example: "If you <strong>heat</strong> water, it <strong>evaporates</strong>. / If it <strong>rains</strong>, we <strong>won't see</strong> the stars. / If I <strong>went</strong> to Mars, I'<strong>d do</strong> some experiments." }, { point: "wish (Câu ao ước)", structure: "S + wish(es) + (that) + S + V2/Ved", explanation: "To express wishes for things that are not possible in the present.", vietnamese: "Để bày tỏ mong muốn về những điều không thể xảy ra ở hiện tại.", example: "I <strong>wish</strong> I <strong>were</strong> able to return to the past." }
                 ],
                 quiz: {
                     grammar: [
@@ -165,12 +175,13 @@
                     ]
                 }
             },
-            "Unit 6: English and world": {
+            {
+                unitName: "6",
                 vocabulary: [
                     { term: "adventurous", wordClass: "adj", vietnamese: "thích phiêu lưu, mạo hiểm" }, { term: "assistant", wordClass: "n", vietnamese: "trợ lý, phụ tá" }, { term: "beneficial", wordClass: "adj", vietnamese: "có ích, có lợi" }, { term: "bully", wordClass: "n", vietnamese: "kẻ hay bắt nạt" }, { term: "challenging", wordClass: "adj", vietnamese: "đầy thử thách" }, { term: "conformist", wordClass: "n", vietnamese: "người tuân thủ" }, { term: "couch potato", wordClass: "n", vietnamese: "người lười vận động" }, { term: "breakthrough", wordClass: "n", vietnamese: "sự đột phá" }, { term: "extrovert", wordClass: "n", vietnamese: "người hướng ngoại" }, { term: "introvert", wordClass: "n", vietnamese: "người hướng nội" }, { term: "loner", wordClass: "n", vietnamese: "người sống cô độc" }, { term: "optimist", wordClass: "n", vietnamese: "người lạc quan" }, { term: "pessimist", wordClass: "n", vietnamese: "người bi quan" }, { term: "realist", wordClass: "n", vietnamese: "người thực tế" }, { term: "rebel", wordClass: "n", vietnamese: "kẻ nổi loạn" }, { term: "rewarding", wordClass: "adj", vietnamese: "bổ ích, đáng làm" }, { term: "sociable", wordClass: "adj", vietnamese: "thích giao tiếp, hòa đồng" }, { term: "spacewalk", wordClass: "n", vietnamese: "chuyến đi bộ ngoài không gian" }
                 ],
                 grammar: [
-                    { point: "Reflexive Pronouns", structure: "myself, yourself, himself, etc.", explanation: "Used when the subject and the object of the verb are the same.", vietnamese: "Dùng khi chủ ngữ và tân ngữ của động từ là một.", example: "Mark taught <strong>himself</strong> to play the guitar." }, { point: "Relative Clauses", structure: "Defining: ... person who ...<br>Non-defining: ... person, who ...,", explanation: "Defining clauses give essential information (no commas). Non-defining clauses give extra information (with commas).", vietnamese: "Mệnh đề quan hệ xác định cung cấp thông tin thiết yếu (không có dấu phẩy). Mệnh đề không xác định cung cấp thông tin bổ sung (có dấu phẩy).", example: "Water puppetry, <strong>which</strong> is a unique aspect of Vietnamese culture, came from the rice fields." }, { point: "Linkers", structure: "because, but, so, so that", explanation: "Used to connect ideas (reason, contrast, result, purpose).", vietnamese: "Dùng để nối các ý (lý do, tương phản, kết quả, mục đích).", example: "I volunteered <strong>because</strong> I like children. / I like children, <strong>so</strong> I volunteered." }
+                    { point: "Reflexive Pronouns (Đại từ phản thân)", structure: "myself, yourself, himself, etc.", explanation: "Used when the subject and the object of the verb are the same.", vietnamese: "Dùng khi chủ ngữ và tân ngữ của động từ là một.", example: "Mark taught <strong>himself</strong> to play the guitar." }, { point: "Relative Clauses (Mệnh đề quan hệ)", structure: "<strong>Defining:</strong> ... person who ...<br><strong>Non-defining:</strong> ... person, who ...,", explanation: "Defining clauses give essential information (no commas). Non-defining clauses give extra information (with commas).", vietnamese: "Mệnh đề quan hệ xác định cung cấp thông tin thiết yếu (không có dấu phẩy). Mệnh đề không xác định cung cấp thông tin bổ sung (có dấu phẩy).", example: "Water puppetry, <strong>which</strong> is a unique aspect of Vietnamese culture, came from the rice fields." }, { point: "Linkers (Từ nối)", structure: "because, but, so, so that", explanation: "Used to connect ideas (reason, contrast, result, purpose).", vietnamese: "Dùng để nối các ý (lý do, tương phản, kết quả, mục đích).", example: "I volunteered <strong>because</strong> I like children. / I like children, <strong>so</strong> I volunteered." }
                 ],
                 quiz: {
                     grammar: [
@@ -178,12 +189,13 @@
                     ]
                 }
             },
-            "Unit 7: On the streets": {
+            {
+                unitName: "7",
                 vocabulary: [
                     { term: "accommodate", wordClass: "v", vietnamese: "cung cấp đủ chỗ" }, { term: "amphitheatre", wordClass: "n", vietnamese: "nhà hát vòng tròn" }, { term: "arena", wordClass: "n", vietnamese: "đấu trường, vũ đài" }, { term: "bury", wordClass: "v", vietnamese: "chôn cất, chôn vùi" }, { term: "cuisine", wordClass: "n", vietnamese: "ẩm thực, cách nấu nướng" }, { term: "distinctive", wordClass: "adj", vietnamese: "đặc biệt, khác biệt" }, { term: "excavate", wordClass: "v", vietnamese: "khai quật" }, { term: "façade", wordClass: "n", vietnamese: "mặt tiền" }, { term: "grand", wordClass: "adj", vietnamese: "tráng lệ, hùng vĩ" }, { term: "hoard", wordClass: "n", vietnamese: "kho tích trữ" }, { term: "interior", wordClass: "n", vietnamese: "bên trong, nội thất" }, { term: "leisure facilities", wordClass: "n", vietnamese: "cơ sở vật chất giải trí" }, { term: "magnificent", wordClass: "adj", vietnamese: "nguy nga, lộng lẫy" }, { term: "mural", wordClass: "n", vietnamese: "tranh tường" }, { term: "pedestrian walkway", wordClass: "n", vietnamese: "lối đi bộ" }, { term: "renovate", wordClass: "v", vietnamese: "cải tạo, nâng cấp" }, { term: "retractable", wordClass: "adj", vietnamese: "có thể co vào, kéo vào" }, { term: "seating capacity", wordClass: "n", vietnamese: "sức chứa" }, { term: "stained-glass", wordClass: "adj", vietnamese: "kính màu" }, { term: "stunning", wordClass: "adj", vietnamese: "tuyệt đẹp, lộng lẫy" }, { term: "unearth", wordClass: "v", vietnamese: "đào lên, tìm ra" }, { term: "vibrant", wordClass: "adj", vietnamese: "sôi động" }, { term: "venue", wordClass: "n", vietnamese: "địa điểm (tổ chức sự kiện)" }
                 ],
                 grammar: [
-                    { point: "Adverbial clauses of result", structure: "so + adj/adv + that ...<br>such + (a/an) + adj + noun + that ...", explanation: "To show the result of an action or quality.", vietnamese: "Để chỉ kết quả của một hành động hoặc tính chất.", example: "The park is <strong>so</strong> popular <strong>that</strong> you can see talented skaters there. / It was <strong>such bad weather that</strong> we had to cancel our trip." }, { point: "The Passive", structure: "Subject + be + Past Participle (V3/Ved)", explanation: "Used to focus on the action, not the person who does it.", vietnamese: "Dùng để nhấn mạnh hành động, không phải người thực hiện.", example: "The time capsule <strong>was buried</strong> in 1890. / The treasure <strong>will be found</strong> one day." }
+                    { point: "Adverbial clauses of result (Mệnh đề trạng ngữ chỉ kết quả)", structure: "<strong>so</strong> + adj/adv + <strong>that</strong> ...<br><strong>such</strong> + (a/an) + adj + noun + <strong>that</strong> ...", explanation: "To show the result of an action or quality.", vietnamese: "Để chỉ kết quả của một hành động hoặc tính chất.", example: "The park is <strong>so</strong> popular <strong>that</strong> you can see talented skaters there. / It was <strong>such bad weather that</strong> we had to cancel our trip." }, { point: "The Passive (Thể bị động)", structure: "Subject + be + Past Participle (V3/Ved)", explanation: "Used to focus on the action, not the person who does it.", vietnamese: "Dùng để nhấn mạnh hành động, không phải người thực hiện.", example: "The time capsule <strong>was buried</strong> in 1890. / The treasure <strong>will be found</strong> one day." }
                 ],
                 quiz: {
                     grammar: [
@@ -191,12 +203,13 @@
                     ]
                 }
             },
-            "Unit 8: Scary": {
+            {
+                unitName: "8",
                 vocabulary: [
                     { term: "a spread (of food)", wordClass: "n", vietnamese: "nhiều loại (thức ăn)" }, { term: "bruise", wordClass: "n", vietnamese: "vết bầm" }, { term: "extreme sport", wordClass: "n", vietnamese: "thể thao mạo hiểm" }, { term: "fatal", wordClass: "adj", vietnamese: "gây chết người, tai hại" }, { term: "keep away from", wordClass: "phr v", vietnamese: "tránh xa" }, { term: "make do with", wordClass: "idiom", vietnamese: "miễn cưỡng chấp nhận" }, { term: "overcrowded", wordClass: "adj", vietnamese: "đông đúc" }, { term: "phobia", wordClass: "n", vietnamese: "nỗi sợ hãi, ám ảnh" }, { term: "ridiculous", wordClass: "adj", vietnamese: "buồn cười, lố bịch" }, { term: "risky", wordClass: "adj", vietnamese: "liều lĩnh, mạo hiểm" }, { term: "sprain", wordClass: "v", vietnamese: "bong gân" }, { term: "thrilled", wordClass: "adj", vietnamese: "rất phấn khởi, thích thú" }, { term: "ward off", wordClass: "phr v", vietnamese: "ngăn ngừa, xua đuổi" }
                 ],
                 grammar: [
-                    { point: "Reported Speech", structure: "He said (that) he was tired.", explanation: "To report what someone else said. Tenses, pronouns, and time expressions often change.", vietnamese: "Để tường thuật lại lời người khác nói. Thì, đại từ và các cụm từ chỉ thời gian thường thay đổi.", example: "Direct: 'I feel afraid.' → Reported: He said that he <strong>felt</strong> afraid." }, { point: "Reported Questions", structure: "She asked me if I was ready.<br>He asked me where I was going.", explanation: "To report questions. Word order changes to a statement form.", vietnamese: "Để tường thuật câu hỏi. Trật tự từ thay đổi thành dạng câu trần thuật.", example: "Direct: 'Did you see the crime?' → Reported: The detective asked us <strong>if we'd seen</strong> the crime." }, { point: "Reported Commands/Requests", structure: "He told me to wait.<br>She asked me not to go.", explanation: "Use verbs like 'tell', 'ask' + object + (not) to-infinitive.", vietnamese: "Dùng các động từ như 'tell', 'ask' + tân ngữ + (not) to-V.", example: "Direct: 'Report the robbery.' → Reported: The police officer asked us <strong>to report</strong> the robbery." }
+                    { point: "Reported Speech (Lời nói gián tiếp)", structure: "He said (that) he was tired.", explanation: "To report what someone else said. Tenses, pronouns, and time expressions often change.", vietnamese: "Để tường thuật lại lời người khác nói. Thì, đại từ và các cụm từ chỉ thời gian thường thay đổi.", example: "Direct: 'I feel afraid.' → Reported: He said that he <strong>felt</strong> afraid." }, { point: "Reported Questions (Câu hỏi gián tiếp)", structure: "She asked me <strong>if</strong> I was ready.<br>He asked me <strong>where</strong> I was going.", explanation: "To report questions. Word order changes to a statement form.", vietnamese: "Để tường thuật câu hỏi. Trật tự từ thay đổi thành dạng câu trần thuật.", example: "Direct: 'Did you see the crime?' → Reported: The detective asked us <strong>if we'd seen</strong> the crime." }, { point: "Reported Commands/Requests (Mệnh lệnh/Yêu cầu gián tiếp)", structure: "He <strong>told me to</strong> wait.<br>She <strong>asked me not to</strong> go.", explanation: "Use verbs like 'tell', 'ask' + object + (not) to-infinitive.", vietnamese: "Dùng các động từ như 'tell', 'ask' + tân ngữ + (not) to-V.", example: "Direct: 'Report the robbery.' → Reported: The police officer asked us <strong>to report</strong> the robbery." }
                 ],
                 quiz: {
                     grammar: [
@@ -204,10 +217,10 @@
                     ]
                 }
             }
-        };
+        ];
         
         // --- DOM Elements ---
-        const unitSelect = document.getElementById('unit-select');
+        const unitSelectorBtns = document.getElementById('unit-selector-btns');
         const vocabList = document.getElementById('vocab-list');
         const grammarPoints = document.getElementById('grammar-points');
         const contentDisplay = document.getElementById('content-display');
@@ -226,24 +239,24 @@
         // --- Functions ---
         
         function populateUnits() {
-            const placeholderOption = document.createElement('option');
-            placeholderOption.value = "";
-            placeholderOption.textContent = "Select a Unit...";
-            placeholderOption.disabled = true;
-            placeholderOption.selected = true;
-            unitSelect.appendChild(placeholderOption);
-
-            for (const unit in data) {
-                const option = document.createElement('option');
-                option.value = unit;
-                option.textContent = unit;
-                unitSelect.appendChild(option);
-            }
+            unitSelectorBtns.innerHTML = '';
+            data.forEach(unit => {
+                const button = document.createElement('button');
+                button.textContent = unit.unitName;
+                button.className = 'unit-btn w-full text-center p-3 rounded-lg font-semibold bg-gray-200 hover:bg-gray-300 transition';
+                button.dataset.unit = unit.unitName;
+                unitSelectorBtns.appendChild(button);
+            });
         }
 
-        function displayContent(unit) {
-            currentUnit = unit;
-            const unitData = data[unit];
+        function displayContent(unitName) {
+            currentUnit = unitName;
+            const unitData = data.find(u => u.unitName === unitName);
+
+            // Update active button
+            document.querySelectorAll('.unit-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.unit === unitName);
+            });
 
             if (!unitData) {
                 contentDisplay.classList.add('hidden');
@@ -256,39 +269,51 @@
             practiceButtons.classList.remove('hidden');
             noContent.classList.add('hidden');
 
+            // Vocabulary Table
             vocabList.innerHTML = '';
-            grammarPoints.innerHTML = '';
-
             if (unitData.vocabulary) {
-                const ol = document.createElement('ol');
-                ol.className = 'list-decimal list-inside space-y-2';
+                const table = document.createElement('table');
+                table.className = 'w-full text-left border-collapse';
+                table.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th class="p-2 border-b-2 font-bold text-gray-600">Word</th>
+                            <th class="p-2 border-b-2 font-bold text-gray-600">Word Class</th>
+                            <th class="p-2 border-b-2 font-bold text-gray-600">Vietnamese Meaning</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                `;
+                const tbody = table.querySelector('tbody');
                 unitData.vocabulary.forEach(item => {
-                    const li = document.createElement('li');
-                    li.className = 'text-gray-700';
-                    li.innerHTML = `<strong class="text-blue-800">${item.term}</strong> (${item.wordClass}) - ${item.vietnamese}`;
-                    ol.appendChild(li);
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td class="p-2 border-b">${item.term}</td>
+                        <td class="p-2 border-b italic text-gray-500">${item.wordClass}</td>
+                        <td class="p-2 border-b">${item.vietnamese}</td>
+                    `;
                 });
-                vocabList.appendChild(ol);
+                vocabList.appendChild(table);
             }
 
+            // Grammar Points
+            grammarPoints.innerHTML = '';
             if (unitData.grammar) {
                 unitData.grammar.forEach(point => {
                     const grammarItem = document.createElement('div');
-                    grammarItem.className = 'pb-4 border-b border-gray-200 last:border-b-0';
+                    grammarItem.className = 'p-4 rounded-lg border border-gray-200 bg-gray-50';
                     grammarItem.innerHTML = `
-                        <h4 class="font-semibold text-xl text-gray-800">${point.point}</h4>
-                        <div class="mt-2 pl-4 border-l-4 border-green-200 space-y-2">
-                            <div>
-                                <p class="text-gray-700"><strong>Structure:</strong></p>
-                                <p class="font-mono text-sm bg-gray-100 p-2 rounded mt-1 inline-block">${point.structure}</p>
+                        <h4 class="font-bold text-lg text-indigo-700">${point.point}</h4>
+                        <p class="text-gray-600 mt-1">${point.vietnamese}</p>
+                        <div class="mt-4 p-4 bg-white rounded-lg border">
+                            <p class="text-gray-700">${point.explanation}</p>
+                            <div class="mt-3">
+                               <p class="font-semibold text-sm text-gray-500">STRUCTURE:</p>
+                               <p class="font-mono text-sm bg-gray-100 p-2 rounded mt-1 inline-block">${point.structure}</p>
                             </div>
-                            <div>
-                                <p class="text-gray-700"><strong>Usage:</strong> ${point.explanation}</p>
-                                <p class="text-green-800"><strong>Giải thích:</strong> ${point.vietnamese}</p>
-                            </div>
-                            <div>
-                                <p class="text-gray-700"><strong>Example:</strong></p>
-                                <p class="italic text-gray-600 bg-gray-50 p-2 rounded mt-1">"${point.example}"</p>
+                             <div class="mt-3">
+                               <p class="font-semibold text-sm text-gray-500">EXAMPLE:</p>
+                               <p class="italic text-gray-600 mt-1">"${point.example}"</p>
                             </div>
                         </div>
                     `;
@@ -298,16 +323,15 @@
         }
 
         function startVocabQuiz() {
-            const unitData = data[currentUnit];
+            const unitData = data.find(u => u.unitName === currentUnit);
             if (!unitData || !unitData.vocabulary || unitData.vocabulary.length < 4) {
                 alert("Not enough vocabulary words in this unit to create a quiz.");
                 return;
             }
 
-            quizTitle.textContent = `Vocabulary Quiz: ${currentUnit}`;
+            quizTitle.textContent = `Vocabulary Quiz: Unit ${currentUnit}`;
             quizContent.innerHTML = '';
             
-            // Get 5 random questions
             const questions = unitData.vocabulary.sort(() => 0.5 - Math.random()).slice(0, 5);
             
             questions.forEach((q, index) => {
@@ -319,14 +343,17 @@
                 questionText.innerHTML = `${index + 1}. What is the Vietnamese meaning of "<strong>${q.term}</strong>"?`;
                 questionDiv.appendChild(questionText);
                 
-                // Create options
                 let options = [q.vietnamese];
-                let otherWords = unitData.vocabulary.filter(v => v.term !== q.term);
+                let allVocab = data.flatMap(unit => unit.vocabulary);
+                let otherWords = allVocab.filter(v => v.term !== q.term && v.vietnamese !== q.vietnamese);
+                
                 while (options.length < 4 && otherWords.length > 0) {
                     let randomWord = otherWords.splice(Math.floor(Math.random() * otherWords.length), 1)[0];
-                    options.push(randomWord.vietnamese);
+                    if (!options.includes(randomWord.vietnamese)) {
+                        options.push(randomWord.vietnamese);
+                    }
                 }
-                options.sort(() => 0.5 - Math.random()); // Shuffle options
+                options.sort(() => 0.5 - Math.random());
 
                 const optionsDiv = document.createElement('div');
                 optionsDiv.className = 'space-y-2';
@@ -349,13 +376,13 @@
         }
 
         function startGrammarQuiz() {
-             const unitData = data[currentUnit];
+            const unitData = data.find(u => u.unitName === currentUnit);
             if (!unitData || !unitData.quiz || !unitData.quiz.grammar) {
                 alert("No grammar quiz available for this unit.");
                 return;
             }
             
-            quizTitle.textContent = `Grammar Quiz: ${currentUnit}`;
+            quizTitle.textContent = `Grammar Quiz: Unit ${currentUnit}`;
             quizContent.innerHTML = '';
             
             const questions = unitData.quiz.grammar;
@@ -399,6 +426,8 @@
                 
                 labels.forEach(label => {
                     const radio = label.querySelector('input');
+                    label.classList.remove('hover:bg-gray-50');
+                    label.style.pointerEvents = 'none';
                     if (radio.value === correctAnswer) {
                         label.classList.add('bg-green-100', 'border-green-400');
                     } else if (radio.checked) {
@@ -425,6 +454,8 @@
 
                 labels.forEach(label => {
                     const radio = label.querySelector('input');
+                    label.classList.remove('hover:bg-gray-50');
+                    label.style.pointerEvents = 'none';
                     if (radio.value === correctAnswer) {
                         label.classList.add('bg-green-100', 'border-green-400');
                     } else if (radio.checked) {
@@ -442,8 +473,10 @@
         }
 
         // --- Event Listeners ---
-        unitSelect.addEventListener('change', (event) => {
-            displayContent(event.target.value);
+        unitSelectorBtns.addEventListener('click', (event) => {
+            if (event.target.classList.contains('unit-btn')) {
+                displayContent(event.target.dataset.unit);
+            }
         });
         
         practiceVocabBtn.addEventListener('click', startVocabQuiz);
@@ -453,8 +486,6 @@
         // --- Initial Setup ---
         window.onload = () => {
             populateUnits();
-            contentDisplay.classList.add('hidden');
-            practiceButtons.classList.add('hidden');
         };
     </script>
 
